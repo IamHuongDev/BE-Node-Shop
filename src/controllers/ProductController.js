@@ -3,11 +3,11 @@ const ProductSevices = require('../services/ProductSevices')
 const createProduct = async (req, res) => {
     try {
         console.log( req.body );
-        const { name, type, image, price, description, countInStock, rating } = req.body;
+        const { name, type, image, price, description, countInStock, rating, discount, selled } = req.body;
 
         console.log('««««« req.body »»»»»', req.body);
 
-        if( !name || !type || !image || !price || !countInStock || !rating ){
+        if( !name || !type || !image || !price || !countInStock || !rating  ){
             return res.status(200).json({
                 status : 'ERR',
                 message: 'The input is required'
@@ -16,7 +16,11 @@ const createProduct = async (req, res) => {
 
         const respone = await ProductSevices.createProduct(req.body)
 
-        return res.status(200).json(respone);
+        return res.status(200).json({
+            status: 'OK',
+            message: 'Product created successfully',
+            data: respone
+        });
     
     } catch (err) {
         return res.status(400).json({
@@ -39,7 +43,11 @@ const updateProduct = async (req, res) => {
         }
 
         const response = await ProductSevices.updateProduct(productId, data);
-        return res.status(200).json(response);
+        return res.status(200).json({
+            status: 'OK',
+            message: 'Product updated successfully',
+            data: response
+        });
     
     } catch (err) {
         return res.status(400).json({
@@ -73,7 +81,7 @@ const getAllProduct = async (req, res) => {
     // console.log('««««« req.query »»»»»', req.query);
     try {
         const {limit , page, sort, filter  } = req.query
-        const response = await ProductSevices.getAllProduct(Number(limit || 8) , Number(page || 0), sort, filter );
+        const response = await ProductSevices.getAllProduct(Number(limit || 15) , Number(page || 0), sort, filter );
         return res.status(200).json(response);
 
     } catch (err) {
